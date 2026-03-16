@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import DecisionInputPanel from "./components/DecisionInputPanel";
 import MagiBrainLayout from "./components/MagiBrainLayout";
 import OptionTray from "./components/OptionTray";
 import TechModal from "./components/TechModal";
 
 const API_URL = "http://localhost:8000/api/decide";
-const CLOCKWISE_ORDER = ["SARASWATI", "DURGA", "LAKSHMI"];
 const SPECIAL_STATES = new Set(["ABSTAIN", "UNDECIDED"]);
 
-function getPanelStatus({ phase, brainName, processingIndex, result }) {
+function getPanelStatus({ phase, brainName, result }) {
   if (phase === "processing") {
-    return CLOCKWISE_ORDER[processingIndex] === brainName ? "processing" : "idle";
+    return "processing";
   }
 
   if (phase !== "resolved" || !result?.final_votes?.[brainName]) {
@@ -33,31 +32,18 @@ function getPanelStatus({ phase, brainName, processingIndex, result }) {
 
 export default function App() {
   const [phase, setPhase] = useState("idle");
-  const [processingIndex, setProcessingIndex] = useState(0);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
   const [verdictOpen, setVerdictOpen] = useState(false);
   const [activeOption, setActiveOption] = useState(null);
 
-  useEffect(() => {
-    if (phase !== "processing") {
-      return undefined;
-    }
-
-    const timer = window.setInterval(() => {
-      setProcessingIndex((current) => (current + 1) % CLOCKWISE_ORDER.length);
-    }, 420);
-
-    return () => window.clearInterval(timer);
-  }, [phase]);
-
   const brainStates = useMemo(
     () => ({
-      SARASWATI: getPanelStatus({ phase, brainName: "SARASWATI", processingIndex, result }),
-      DURGA: getPanelStatus({ phase, brainName: "DURGA", processingIndex, result }),
-      LAKSHMI: getPanelStatus({ phase, brainName: "LAKSHMI", processingIndex, result }),
+      SARASWATI: getPanelStatus({ phase, brainName: "SARASWATI", result }),
+      DURGA: getPanelStatus({ phase, brainName: "DURGA", result }),
+      LAKSHMI: getPanelStatus({ phase, brainName: "LAKSHMI", result }),
     }),
-    [phase, processingIndex, result],
+    [phase, result],
   );
 
   async function handleSubmit(payload) {
@@ -66,7 +52,6 @@ export default function App() {
     setVerdictOpen(false);
     setActiveOption(null);
     setPhase("processing");
-    setProcessingIndex(0);
 
     try {
       const response = await fetch(API_URL, {

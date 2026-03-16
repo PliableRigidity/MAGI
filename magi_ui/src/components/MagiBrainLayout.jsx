@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const PANELS = [
   { brain: "SARASWATI", label: "BRAIN 1", position: "top" },
@@ -43,7 +43,7 @@ export default function MagiBrainLayout({ brainStates, votes, majorityDecision, 
 
       const topVertex = {
         x: frameCenterX,
-        y: topBottomY - 125,
+        y: topBottomY - 300,
       };
 
       const leftVertex = {
@@ -76,12 +76,16 @@ export default function MagiBrainLayout({ brainStates, votes, majorityDecision, 
   return (
     <section className="magi-frame" ref={frameRef}>
       <div className="magi-header-row">
-        <div className="magi-banner">QUESTION</div>
-        <div className="magi-banner magi-banner-right">RESOLUTION</div>
+        <div className="magi-banner">
+          <span>質問</span>
+        </div>
+        <div className="magi-banner magi-banner-right">
+          <span>解決</span>
+        </div>
       </div>
 
       <aside className="system-dossier">
-        <p>CODE: 473</p>
+        <p>CODE:473</p>
         <p>FILE: MAGI.SYS</p>
         <p>EXTENSION: 3023</p>
         <p>EX_MODE: {phase === "processing" ? "RUN" : "OFF"}</p>
@@ -135,8 +139,54 @@ export default function MagiBrainLayout({ brainStates, votes, majorityDecision, 
 }
 
 function BrainPanel({ name, label, panelRef, position, state, vote }) {
+  const [isBlinking, setIsBlinking] = useState(false);
+
+  useEffect(() => {
+    if (state !== "processing") {
+      setIsBlinking(false);
+      return undefined;
+    }
+
+    let waitTimer = 0;
+    let flashTimer = 0;
+    let cancelled = false;
+
+    const randomBetween = (min, max) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const scheduleBlink = () => {
+      waitTimer = window.setTimeout(() => {
+        if (cancelled) {
+          return;
+        }
+
+        setIsBlinking(true);
+
+        flashTimer = window.setTimeout(() => {
+          if (cancelled) {
+            return;
+          }
+
+          setIsBlinking(false);
+          scheduleBlink();
+        }, randomBetween(50, 120));
+      }, randomBetween(80, 300));
+    };
+
+    scheduleBlink();
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(waitTimer);
+      window.clearTimeout(flashTimer);
+    };
+  }, [state]);
+
   return (
-    <article className={`brain-panel brain-${position} state-${state}`} ref={panelRef}>
+    <article
+      className={`brain-panel brain-${position} state-${state}${isBlinking ? " processing-flash" : ""}`}
+      ref={panelRef}
+    >
       <div className="brain-gridlines" />
       <div className="brain-content">
         <p className="brain-tag">{position.toUpperCase()}</p>

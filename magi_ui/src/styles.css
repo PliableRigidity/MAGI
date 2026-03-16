@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;900&display=swap");
+
 :root {
   color-scheme: dark;
   --bg: #030303;
@@ -8,8 +12,8 @@
   --ink: #ffbe63;
   --blue: #59b9e8;
   --blue-soft: rgba(89, 185, 232, 0.28);
-  --mint: #88f2b6;
-  --mint-deep: #5cd79a;
+  --mint: #2596be;
+  --mint-deep: #1c7697;
   --red: #ff554e;
   --amber: #f1b64d;
   --text: #ffd7a3;
@@ -192,7 +196,7 @@ textarea {
   content: "";
   position: absolute;
   inset: 12px 10px 10px;
-  border: 1px solid var(--orange-dim);
+  border: 1px solid var(--orange);
   pointer-events: none;
 }
 
@@ -205,13 +209,36 @@ textarea {
 
 .magi-banner {
   width: 33%;
-  padding: 16px 14px;
-  border: 1px solid var(--orange);
+  padding: 8px 10px;
   color: var(--orange);
   text-align: center;
-  font-size: clamp(1.6rem, 4vw, 3rem);
+  font-size: clamp(3.8rem, 7vw, 5.8rem);
   font-weight: 800;
   letter-spacing: 0.12em;
+  position: relative;
+}
+
+.magi-banner::before,
+.magi-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: none;
+}
+
+.magi-banner::after {
+  inset: 4px;
+}
+
+.magi-banner span {
+  display: inline-block;
+  font-family: "Noto Sans JP", "Yu Gothic", "Hiragino Kaku Gothic Pro", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  transform: scale(1.55, 0.82);
+  transform-origin: center;
 }
 
 .magi-banner-right {
@@ -221,18 +248,29 @@ textarea {
 .system-dossier {
   position: absolute;
   left: 28px;
-  top: 120px;
+  top: 190px;
   z-index: 2;
-  width: 220px;
+  width: 330px;
   color: var(--orange);
   line-height: 1.15;
   font-size: 0.92rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-family: "OCR B Std", "OCRB", "Lucida Console", monospace;
 }
 
 .system-dossier p {
   margin: 4px 0;
+}
+
+.system-dossier p:first-child {
+  font-size: 2.4rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.system-dossier p:not(:first-child) {
+  padding-left: 40px;
 }
 
 .system-status {
@@ -260,7 +298,7 @@ textarea {
 .magi-hub {
   position: absolute;
   left: 50%;
-  top: 52%;
+  top: 58%;
   z-index: 5;
   width: 172px;
   height: 74px;
@@ -275,16 +313,17 @@ textarea {
   content: "";
   position: absolute;
   inset: 0;
-  border-left: 5px solid var(--orange);
-  border-right: 5px solid var(--orange);
 }
 
 .magi-hub-label {
   color: var(--orange);
   font-size: clamp(2.4rem, 4vw, 3.9rem);
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 0.9;
+  font-family: "Times New Roman", serif;
+  transform: scaleX(1.35);
+  transform-origin: center;
 }
 
 .magi-connector-overlay {
@@ -314,7 +353,11 @@ textarea {
 .brain-panel {
   position: absolute;
   z-index: 2;
-  background: var(--panel);
+  --brain-fill: #59b9e8;
+  --brain-grid: #2b6079;
+  --brain-text: #091017;
+  background: var(--brain-fill);
+  color: var(--brain-text);
   overflow: hidden;
 }
 
@@ -329,18 +372,18 @@ textarea {
 .brain-top {
   top: 28px;
   left: 50%;
-  width: min(32vw, 332px);
-  height: 300px;
+  width: min(32vw, 382px);
+  height: 350px;
   transform: translateX(-50%);
-  clip-path: polygon(0 0, 100% 0, 100% 70%, 78% 100%, 22% 100%, 0 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 68%, 80% 100%, 20% 100%, 0 68%);
 }
 
 .brain-top::before {
-  clip-path: polygon(0 0, 100% 0, 100% 70%, 78% 100%, 22% 100%, 0 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 68%, 80% 100%, 20% 100%, 0 68%);
 }
 
 .brain-left {
-  left: 14px;
+  left: 200px;
   bottom: 112px;
   width: min(41vw, 420px);
   height: 210px;
@@ -352,7 +395,7 @@ textarea {
 }
 
 .brain-right {
-  right: 14px;
+  right: 200px;
   bottom: 112px;
   width: min(41vw, 420px);
   height: 210px;
@@ -364,12 +407,7 @@ textarea {
 }
 
 .brain-gridlines {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to bottom, rgba(255, 141, 12, 0.22) 0, rgba(255, 141, 12, 0.22) 1px, transparent 1px, transparent 8px),
-    linear-gradient(to right, rgba(255, 141, 12, 0.08) 0, rgba(255, 141, 12, 0.08) 1px, transparent 1px, transparent 36px);
-  opacity: 0.32;
+  display: none;
 }
 
 .brain-content {
@@ -394,7 +432,7 @@ textarea {
 
 .brain-tag,
 .brain-sub {
-  color: rgba(255, 211, 157, 0.7);
+  color: #2e3941;
   font-size: 0.78rem;
 }
 
@@ -410,67 +448,66 @@ textarea {
 }
 
 .state-idle {
-  background: #59b9e8;
-  color: #091017;
-  box-shadow: 0 0 22px rgba(42, 151, 216, 0.1);
+  --brain-fill: #59b9e8;
+  --brain-grid: #2b6079;
+  --brain-text: #091017;
 }
 
 .state-idle .brain-tag,
 .state-idle .brain-sub,
 .state-idle .brain-vote {
-  color: rgba(9, 16, 23, 0.72);
+  color: #091017;
 }
 
 .state-processing {
-  background:
-    linear-gradient(180deg, rgba(136, 242, 182, 0.95), rgba(92, 215, 154, 0.9));
-  box-shadow:
-    0 0 32px rgba(123, 244, 177, 0.38),
-    inset 0 0 34px rgba(123, 244, 177, 0.18);
-  color: #03110b;
-}
-
-.state-processing .brain-gridlines {
-  opacity: 0.55;
+  --brain-fill: #59b9e8;
+  --brain-grid: #2b6079;
+  --brain-text: #091017;
 }
 
 .state-processing .brain-tag,
 .state-processing .brain-sub,
 .state-processing .brain-vote {
-  color: rgba(3, 17, 11, 0.78);
+  color: #091017;
+}
+
+.state-processing.processing-flash {
+  --brain-fill: #000000;
+  --brain-grid: #1d1d1d;
+  --brain-text: #000000;
 }
 
 .state-yes {
-  background:
-    repeating-linear-gradient(
-      -25deg,
-      rgba(123, 244, 177, 0.92) 0,
-      rgba(123, 244, 177, 0.92) 14px,
-      rgba(78, 211, 142, 0.86) 14px,
-      rgba(78, 211, 142, 0.86) 28px
-    );
-  color: #03110b;
-}
-
-.state-yes .brain-gridlines {
-  background-image:
-    linear-gradient(to bottom, rgba(3, 17, 11, 0.18) 0, rgba(3, 17, 11, 0.18) 1px, transparent 1px, transparent 8px),
-    linear-gradient(to right, rgba(3, 17, 11, 0.1) 0, rgba(3, 17, 11, 0.1) 1px, transparent 1px, transparent 36px);
-  opacity: 0.55;
+  --brain-fill: #5cf992;
+  --brain-grid: #2fa75a;
+  --brain-text: #03110b;
 }
 
 .state-yes .brain-tag,
 .state-yes .brain-sub,
 .state-yes .brain-vote {
-  color: rgba(3, 17, 11, 0.78);
+  color: #03110b;
 }
 
 .state-no {
-  background: linear-gradient(180deg, rgba(255, 85, 78, 0.74), rgba(65, 6, 6, 0.97));
+  --brain-fill: #970315;
+  --brain-grid: #5f010d;
+  --brain-text: #230606;
 }
 
 .state-abstain {
-  background: linear-gradient(180deg, rgba(241, 182, 77, 0.42), rgba(45, 30, 5, 0.96));
+  --brain-fill: #f5ab0e;
+  --brain-grid: #9f6e07;
+  --brain-text: #2d1e05;
+}
+
+.state-no .brain-tag,
+.state-no .brain-sub,
+.state-no .brain-vote,
+.state-abstain .brain-tag,
+.state-abstain .brain-sub,
+.state-abstain .brain-vote {
+  color: var(--brain-text);
 }
 
 .decision-readout {
@@ -668,11 +705,6 @@ textarea {
   .terminal-grid,
   .signal-grid {
     grid-template-columns: 1fr;
-  }
-
-  .magi-banner {
-    width: 48%;
-    font-size: 1.3rem;
   }
 
   .terminal-line {
