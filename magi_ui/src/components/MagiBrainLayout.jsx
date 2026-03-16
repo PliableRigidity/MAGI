@@ -48,12 +48,12 @@ export default function MagiBrainLayout({ brainStates, votes, majorityDecision, 
 
       const leftVertex = {
         x: frameCenterX - triangleWidth / 2,
-        y: Math.min(lowerBrainMidpointY, topVertex.y + triangleHeight),
+        y: Math.min(lowerBrainMidpointY, topVertex.y + triangleHeight)+20,
       };
 
       const rightVertex = {
         x: frameCenterX + triangleWidth / 2,
-        y: Math.min(lowerBrainMidpointY, topVertex.y + triangleHeight),
+        y: Math.min(lowerBrainMidpointY, topVertex.y + triangleHeight)+20,
       };
 
       setTrianglePoints([topVertex, leftVertex, rightVertex]);
