@@ -1,10 +1,90 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const PANELS = [
-  { brain: "SARASWATI", label: "BRAIN 1", position: "top" },
-  { brain: "LAKSHMI", label: "BRAIN 2", position: "left" },
-  { brain: "DURGA", label: "BRAIN 3", position: "right" },
+  { brain: "SARASWATI", label: "SARAS-1", position: "top" },
+  { brain: "LAKSHMI", label: "LAK-2", position: "left" },
+  { brain: "DURGA", label: "DURG-3", position: "right" },
 ];
+
+function getPanelStateText(state, vote) {
+  if (state === "processing") return "";
+  if (vote === "YES") return "";
+  if (vote === "NO") return "";
+  if (vote === "ABSTAIN") return "";
+  return "";
+}
+
+function StatusBox({ phase, majorityDecision }) {
+  const [isBlinking, setIsBlinking] = useState(false);
+
+  useEffect(() => {
+    if (phase !== "processing") {
+      setIsBlinking(false);
+      return undefined;
+    }
+
+    let waitTimer = 0;
+    let flashTimer = 0;
+    let cancelled = false;
+
+    const randomBetween = (min, max) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const scheduleBlink = () => {
+      waitTimer = window.setTimeout(() => {
+        if (cancelled) return;
+        setIsBlinking(true);
+
+        flashTimer = window.setTimeout(() => {
+          if (cancelled) return;
+          setIsBlinking(false);
+          scheduleBlink();
+        }, randomBetween(50, 120));
+      }, randomBetween(80, 300));
+    };
+
+    scheduleBlink();
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(waitTimer);
+      window.clearTimeout(flashTimer);
+    };
+  }, [phase]);
+
+  let statusLabel = "待機";
+  let statusColor = "var(--blue)";
+
+  if (majorityDecision) {
+    const rawDecision = String(majorityDecision).toUpperCase();
+    if (rawDecision === "NO" || rawDecision === "REJECTED") {
+      statusLabel = "拒絶";
+      statusColor = "var(--red)";
+    } else if (rawDecision === "ABSTAIN" || rawDecision === "UNDECIDED") {
+      statusLabel = "棄権";
+      statusColor = "var(--amber)";
+    } else {
+      statusLabel = "容認";
+      statusColor = "#5cf992";
+    }
+  } else if (phase === "processing") {
+    statusLabel = "情報";
+  }
+
+  return (
+    <div
+      className={`magi-status-box ${isBlinking ? "processing-flash" : ""}`}
+      style={{ borderColor: statusColor }}
+    >
+      <div
+        className="magi-status-box-inner"
+        style={{ borderColor: statusColor, color: statusColor }}
+      >
+        <span className="magi-status-box-text">{statusLabel}</span>
+      </div>
+    </div>
+  );
+}
 
 export default function MagiBrainLayout({ brainStates, votes, majorityDecision, phase }) {
   const frameRef = useRef(null);
@@ -48,12 +128,12 @@ export default function MagiBrainLayout({ brainStates, votes, majorityDecision, 
 
       const leftVertex = {
         x: frameCenterX - triangleWidth / 2,
-        y: Math.min(lowerBrainMidpointY, topVertex.y + triangleHeight)+20,
+        y: Math.min(lowerBrainMidpointY, topVertex.y + triangleHeight) + 40,
       };
 
       const rightVertex = {
         x: frameCenterX + triangleWidth / 2,
-        y: Math.min(lowerBrainMidpointY, topVertex.y + triangleHeight)+20,
+        y: Math.min(lowerBrainMidpointY, topVertex.y + triangleHeight) + 40,
       };
 
       setTrianglePoints([topVertex, leftVertex, rightVertex]);
@@ -77,10 +157,18 @@ export default function MagiBrainLayout({ brainStates, votes, majorityDecision, 
     <section className="magi-frame" ref={frameRef}>
       <div className="magi-header-row">
         <div className="magi-banner">
+          <div className="banner-decor-box"></div>
+          <div className="banner-decor-box"></div>
           <span>質問</span>
+          <div className="banner-decor-box"></div>
+          <div className="banner-decor-box"></div>
         </div>
         <div className="magi-banner magi-banner-right">
+          <div className="banner-decor-box"></div>
+          <div className="banner-decor-box"></div>
           <span>解決</span>
+          <div className="banner-decor-box"></div>
+          <div className="banner-decor-box"></div>
         </div>
       </div>
 
@@ -92,10 +180,7 @@ export default function MagiBrainLayout({ brainStates, votes, majorityDecision, 
         <p>PRIORITY: AAA</p>
       </aside>
 
-      <aside className="system-status">
-        <p className="system-status-label">STATE</p>
-        <strong>{phase.toUpperCase()}</strong>
-      </aside>
+      <StatusBox phase={phase} majorityDecision={majorityDecision} />
 
       {PANELS.map((panel) => (
         <BrainPanel
@@ -128,11 +213,6 @@ export default function MagiBrainLayout({ brainStates, votes, majorityDecision, 
 
       <div className="magi-hub">
         <span className="magi-hub-label">MAGI</span>
-      </div>
-
-      <div className="decision-readout">
-        <span>MAJORITY</span>
-        <strong>{majorityDecision ?? "STANDBY"}</strong>
       </div>
     </section>
   );
@@ -182,17 +262,25 @@ function BrainPanel({ name, label, panelRef, position, state, vote }) {
     };
   }, [state]);
 
+  const getShapePoints = (pos) => {
+    if (pos === "top") return "0,0 100,0 100,68 80,100 20,100 0,68";
+    if (pos === "left") return "0,0 64,0 100,38 100,100 0,100";
+    if (pos === "right") return "36,0 100,0 100,100 0,100 0,38";
+    return "";
+  };
+
   return (
     <article
       className={`brain-panel brain-${position} state-${state}${isBlinking ? " processing-flash" : ""}`}
       ref={panelRef}
     >
+      <svg className="brain-shape-svg" preserveAspectRatio="none" viewBox="0 0 100 100">
+        <polygon className="brain-shape-poly" points={getShapePoints(position)} />
+      </svg>
       <div className="brain-gridlines" />
       <div className="brain-content">
-        <p className="brain-tag">{position.toUpperCase()}</p>
         <h2>{label}</h2>
-        <p className="brain-vote">{vote ?? "STANDBY"}</p>
-        <p className="brain-sub">{label}</p>
+        <p className="brain-vote">{getPanelStateText(state, vote)}</p>
       </div>
     </article>
   );

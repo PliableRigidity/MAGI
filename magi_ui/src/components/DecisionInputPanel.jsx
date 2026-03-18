@@ -42,10 +42,10 @@ export default function DecisionInputPanel({ onSubmit, busy }) {
           />
         </label>
 
-        <label className="terminal-line">
+        <label className="terminal-line terminal-line-constraints">
           <span className="terminal-label">constraints:</span>
           <textarea
-            className="terminal-textarea terminal-textarea-small"
+            className="terminal-textarea terminal-textarea-small terminal-textarea-constraints"
             value={constraints}
             onChange={(event) => setConstraints(event.target.value)}
             placeholder="One constraint per line"
