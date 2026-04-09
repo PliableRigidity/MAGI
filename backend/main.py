@@ -1,28 +1,9 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+"""Compatibility entrypoint that now forwards to the modular backend app."""
 
-from backend.orchestrator import run_pipeline
-from backend.schemas import FinalDecision, RawUserInput
-
-app = FastAPI(title="MAGI Decision Engine")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+from backend.app.main import app
 
 
-@app.get("/")
-def health_check() -> dict[str, str]:
-    return {"status": "ok"}
+if __name__ == "__main__":
+    import uvicorn
 
-
-@app.post("/api/decide", response_model=FinalDecision)
-def decide(payload: RawUserInput) -> FinalDecision:
-    try:
-        return run_pipeline(payload)
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc)) from exc
+    uvicorn.run("backend.app.main:app", host="0.0.0.0", port=8000, reload=True)
