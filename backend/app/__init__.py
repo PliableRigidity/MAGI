@@ -1,1 +1,0 @@
-"""Modular assistant application package."""
