@@ -461,3 +461,10 @@ FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\IshaanV\\Doc
 2026-04-10 00:46:19,022 - httpx - INFO - [_client.py:1740] - HTTP Request: GET https://nominatim.openstreetmap.org/search?q=Cambridge&format=jsonv2&limit=1 "HTTP/1.1 200 OK"
 2026-04-10 00:46:19,448 - httpx - INFO - [_client.py:1740] - HTTP Request: GET https://router.project-osrm.org/route/v1/driving/-0.1277653,51.5074456;0.1186637,52.2055314?overview=full&geometries=geojson "HTTP/1.1 200 OK"
 2026-04-10 00:46:20,447 - httpx - INFO - [_client.py:1740] - HTTP Request: GET https://router.project-osrm.org/route/v1/driving/-0.1277653,51.5074456;0.1186637,52.2055314?overview=full&geometries=geojson "HTTP/1.1 200 OK"
+2026-04-10 01:04:09,733 - httpx - INFO - [_client.py:1740] - HTTP Request: GET https://nominatim.openstreetmap.org/search?q=London&format=jsonv2&limit=1 "HTTP/1.1 200 OK"
+2026-04-10 01:04:09,737 - httpx - INFO - [_client.py:1740] - HTTP Request: GET https://nominatim.openstreetmap.org/search?q=London&format=jsonv2&limit=1 "HTTP/1.1 200 OK"
+2026-04-10 01:04:11,192 - httpx - INFO - [_client.py:1740] - HTTP Request: GET https://nominatim.openstreetmap.org/search?q=Cambridge&format=jsonv2&limit=1 "HTTP/1.1 200 OK"
+2026-04-10 01:04:11,576 - httpx - INFO - [_client.py:1740] - HTTP Request: GET https://nominatim.openstreetmap.org/search?q=Cambridge&format=jsonv2&limit=1 "HTTP/1.1 200 OK"
+2026-04-10 01:04:12,275 - httpx - INFO - [_client.py:1740] - HTTP Request: GET https://router.project-osrm.org/route/v1/driving/-0.1277653,51.5074456;0.1186637,52.2055314?overview=full&geometries=geojson "HTTP/1.1 200 OK"
+2026-04-10 01:04:13,277 - httpx - INFO - [_client.py:1740] - HTTP Request: GET https://router.project-osrm.org/route/v1/driving/-0.1277653,51.5074456;0.1186637,52.2055314?overview=full&geometries=geojson "HTTP/1.1 200 OK"
+2026-04-10 01:04:13,971 - backend.app.core.application - INFO - [application.py:22] - Assistant platform shutdown
